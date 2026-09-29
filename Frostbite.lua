@@ -30,18 +30,18 @@ task.spawn(function()
         camera.CFrame = camera.CFrame * cf
     end)
     camShake:Start()
-    
+ 
     local gameData = game.ReplicatedStorage:WaitForChild("GameData")
     local latestRoom = gameData:WaitForChild("LatestRoom")
     local room = workspace.CurrentRooms:FindFirstChild(tostring(latestRoom.Value))
-    
+ 
     local player = game.Players.LocalPlayer
     local entity = nil
     local shaking = true
     local active = false
     local turn1 = true
-
-   if G.LoadGithubModel then
+ 
+    if G.LoadGithubModel then
         entity = G.LoadGithubModel(frostURL)
         if entity then entity.Parent = workspace end
     end
