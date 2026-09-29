@@ -41,17 +41,17 @@ task.spawn(function()
     local active = false
     local turn1 = true
 
-    if G.LoadGithubModel then
+   if G.LoadGithubModel then
         entity = G.LoadGithubModel(frostURL)
         if entity then entity.Parent = workspace end
     end
-
+ 
     if not entity then return end
-
+ 
     local part = entity:FindFirstChild("Part")
     local static = part:FindFirstChild("Static Effect")
     static:Play()
-
+ 
     -- Node Placement
     local nodes = room:FindFirstChild("Nodes")
     if nodes then
@@ -59,35 +59,36 @@ task.spawn(function()
         local randomNode = childrenNodes[math.random(1, #childrenNodes)]
         part.CFrame = randomNode.CFrame * CFrame.new(math.random(5, 10), 6, math.random(5, 10))
     end
-
+ 
     -- Initial Shake Loop
     task.spawn(function()
         while entity and entity.Parent and turn1 do
             task.wait(0.5)
-            if shaking then camShake:ShakeOnce(14, 30, 0, 4) end
+            if shaking then camShake:ShakeOnce(10, 15, 0, 4) end
         end
     end)
-
+ 
     task.wait(5.33)
     shaking = false
     turn1 = false
     game.TweenService:Create(static, TweenInfo.new(1.4), {PlaybackSpeed = 0}):Play()
     task.wait(2.8)
-
+ 
     -- Active Shake Loop
     task.spawn(function()
         while entity and entity.Parent and active do
             task.wait(0.5)
-            if not shaking then camShake:ShakeOnce(20, 30, 0, 3) end
+            if not shaking then camShake:ShakeOnce(5, 20, 0, 3) end
         end
     end)
-
+ 
     active = true
     part.Ambience:Play()
     part.AmbienceFar:Play()
     part.Attachment.Heylois.Enabled = true
     part.Attachment.face.Enabled = true
-
+    part.Attachment.BlackTrail.Enabled = true
+ 
     -- [[ THE HEAT DETECTION LOGIC ]]
     task.delay(1.3, function()
         task.spawn(function()
@@ -95,10 +96,10 @@ task.spawn(function()
                 local char = player.Character
                 if char and char:FindFirstChild("Humanoid") then
                     local hasHeat = false
-                    
+ 
                     -- Only check for Lighter or Candle
                     local tool = char:FindFirstChild("Lighter") or char:FindFirstChild("Candle")
-                    
+ 
                     if tool then
                         -- Check for active PointLight within the tool
                         for _, obj in ipairs(tool:GetDescendants()) do
@@ -108,10 +109,10 @@ task.spawn(function()
                             end
                         end
                     end
-
+ 
                     if not hasHeat and char.Humanoid.Health > 0 then
-                        char.Humanoid:TakeDamage(10)
-                        
+                        char.Humanoid:TakeDamage(5)
+ 
                         -- Handle Death
                         if char.Humanoid.Health <= 0 then
                             pcall(function()
@@ -127,17 +128,19 @@ task.spawn(function()
             end
         end)
     end)
-
+ 
     -- Wait for player to move to next room
     latestRoom.Changed:Wait()
-    
+ 
     shaking = true
     active = false
     part.Ambience:Stop()
     part.AmbienceFar:Stop()
     part.Attachment.Heylois.Enabled = false
     part.Attachment.face.Enabled = false
-    
-    task.wait(2.6)
+    part.Despawn:Play()
+    part.Attachment.BlackTrail.Enabled = false
+ 
+    task.wait(6)
     entity:Destroy()
 end)
