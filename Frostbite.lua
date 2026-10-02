@@ -21,7 +21,7 @@ G.LoadGithubModel = function(url)
     return nil
 end
 
-local frostURL = "https://github.com/themasterman236-spec/Oldest-Hardcore/raw/main/Frostbite.rbxm"
+local frostURL = "https://github.com/themasterman236-spec/Oldest-Hardcore/raw/main/FROST.rbxm"
 
 task.spawn(function()
     local camera = workspace.CurrentCamera
